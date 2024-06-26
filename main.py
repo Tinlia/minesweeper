@@ -1,11 +1,17 @@
 global grid
+global display
 grid = []
+display = []
+
 mines = 10
 size = 10
 
 def initialize():
     global grid
+    global display
     grid = [["_" for _ in range(size)] for _ in range(size)]
+    display = [["#" for _ in range(size)] for _ in range(size)]
+    
     
 def populate_mines():
     def place_mine():
@@ -38,7 +44,7 @@ def populate_numbers():
             grid[x][y] = count
 
 def print_grid():
-    for row in grid:
+    for row in display:
         print(" ".join(str(cell) for cell in row))
 
 def main():
@@ -65,12 +71,14 @@ def main():
             print(grid[x][y])
             if len(cmd) == 3 and cmd[2] == "f":
                 if grid[x][y] == "F":
-                    grid[x][y] = "_"
+                    display[x][y] = "#"
                     flags -= 1
                 else:
-                    grid[x][y] = "F"
+                    grid[x][y] = "!"
                     flags += 1
             else:
+                display[x][y] = grid[x][y]
+            
                 if grid[x][y] == "X":
                     print("Game Over")
                     break
