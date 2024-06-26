@@ -47,6 +47,37 @@ def print_grid():
     for row in display:
         print(" ".join(str(cell) for cell in row))
 
+# TODO        
+def check_nearby(x, y):
+    global grid
+    global display
+    display[x][y] = grid[x][y]
+    # Check surrounding cells
+    for dx in [-1, 0, 1]:
+        for dy in [-1, 0, 1]:
+            # If center cell
+            if dx == 0 and dy == 0:
+                continue
+            # If out of bounds
+            if x + dx < 0 or x + dx >= size or y + dy < 0 or y + dy >= size:
+                continue
+            if grid[x + dx][y + dy] == "0":
+                print("0 Found!")
+                clear_nearby(x + dx, y + dy)
+                check_nearby(x + dx, y + dy)
+    
+    clear_nearby(x, y)
+
+def clear_nearby(x, y):
+    print("Revealing nearby cells")
+    # Reveal surrounding 8 cells
+    for dx in [-1, 0, 1]:
+        for dy in [-1, 0, 1]:
+            if x + dx < 0 or x + dx >= size or y + dy < 0 or y + dy >= size:
+                continue
+            display[x + dx][y + dy] = grid[x + dx][y + dy]
+    
+
 def main():
     global grid
     initialize()
@@ -74,7 +105,7 @@ def main():
                     display[x][y] = "#"
                     flags -= 1
                 else:
-                    grid[x][y] = "!"
+                    display[x][y] = "!"
                     flags += 1
             else:
                 display[x][y] = grid[x][y]
@@ -83,6 +114,10 @@ def main():
                     print("Game Over")
                     break
                 else:
+                    if grid[x][y] == 0:
+                        check_nearby(x, y)
+                    else:
+                        display[x][y] = grid[x][y]
                     print("You are safe")
                     
             
